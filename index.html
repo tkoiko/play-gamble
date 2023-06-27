@@ -1,4 +1,6 @@
 <body>
+	<iframe height='512' width='512' id='background' src='https://tynroar.netlify.app/'>
+	</iframe>
 	<page id="mainpage">
 		777
 	</page>
@@ -117,6 +119,8 @@
 		init(result.length);
 		loop();
 		
+		console.log(result);
+		
 		return result;
 	}
 
@@ -131,6 +135,9 @@
 		
 		document.body.onclick = () => {
 			const dt = Date.now() - timestamp;
+			if (dt < duration) {
+				return;
+			}
 			timestamp += dt;
 			run(dt, symbols);
 		}
@@ -138,7 +145,6 @@
 		run(duration, symbols);
 	}
 
-	main();
 </script>
 
 <style>
@@ -147,7 +153,7 @@
 		height: 100vh;
 		margin: 0;
 		display: flex;
-		//background: #000000;
+		perspective: 333vh;
 	}
 	
 	log, dust {
@@ -166,8 +172,29 @@
 	
 	#mainpage bb {
 		display: block;
-		height: 2em;
+		height: 1.3em;
 		
+	}
+	
+	#background {
+		top: 50%;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%, -50%) rotate3d(0, 1, 0, 60deg);
+		border: none;
+		z-index: -1;
+		animation: rotate 120s infinite;
+		animation-timing-function: linear;
+	}
+	
+	@keyframes rotate {
+		0% {
+			transform: translate(-50%, -50%) rotate3d(0, 1, 0, -90deg);
+		}
+		
+		100% {
+			transform: translate(-50%, -50%) rotate3d(0, 1, 0, 90deg);
+		}
 	}
 </style>
 
