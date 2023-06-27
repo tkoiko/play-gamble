@@ -1,6 +1,6 @@
 <body>
-	<iframe height='512' width='512' id='background' src='https://tynroar.netlify.app/'>
-	</iframe>
+	<!--iframe height='512' width='512' id='background' src='https://tynroar.netlify.app/'>
+	</iframe-->
 	<page id="mainpage">
 		777
 	</page>
@@ -34,7 +34,7 @@
 		D: '🧻'
 	}
 	
-	const symbols_b = ['🌚', '🌝', '🌒', '🌘', '🕗', '🕕', '🌐', '🌎', '🌍']
+	const symbols_b = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'] // [ '🕗', '🕕', '🌐', '🌎', '🌍' ]
 	
 	function rng_symbol(items = ranks) {
 		var item = items[Math.floor(Math.random()*items.length)];
@@ -126,7 +126,7 @@
 
 	function main() {
 		let symbols = symbols_b.slice();
-		const duration = 1000;
+		const duration = 10000;
 		let timestamp = Date.now();
 		
 		const run = (dt, list) => {
