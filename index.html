@@ -1,0 +1,176 @@
+<body>
+	<page id="mainpage">
+		777
+	</page>
+	<log type='md'>
+		| 2 12 | 3 11 | 5 9  | 6 8   | 4 7 10  |
+		| ------------------------------------ |
+		| 2/36 | 4/36 | 8/36 | 10/36 |  12/36  |
+		|   S  |   A  |  B   |   C   |    D    |
+		
+		['-', '-', 'S', 'A', 'D', 'B', 'C', 'D', 'C', 'B', 'D', 'A', 'S']
+		
+			
+	</log>
+	<dust>
+		https://gamedev.ru/projects/forum/?id=272911&page=160
+		Космические стимуляторы.
+	</dust>
+</body>
+
+
+<script>
+	"use stict"
+
+	const ranks = ['-', '-', 'S', 'A', 'D', 'B', 'C', 'D', 'C', 'B', 'D', 'A', 'S'];
+
+	const symbols_a = {
+		S: '🎟️',
+		A: '💣',
+		B: '💎',
+		C: '❤️',
+		D: '🧻'
+	}
+	
+	const symbols_b = ['🌚', '🌝', '🌒', '🌘', '🕗', '🕕', '🌐', '🌎', '🌍']
+	
+	function rng_symbol(items = ranks) {
+		var item = items[Math.floor(Math.random()*items.length)];
+		return item;
+	}
+
+	function dice(v = 6) {
+		return Math.round(Math.random() * (v - 1)) + 1;
+	}
+	
+	function throwDices(amount = 2) {
+		let r = 0;
+		for(let i = 0; i < amount; i++) {
+			const d = dice();
+			r += d;
+		}
+		
+		return r;
+	}
+
+	function print(msg) {
+		mainpage.innerHTML = msg;
+	}
+	
+	function slot(amount = 3) {
+		let r = '';
+		for(let i = 0; i < amount; i++) {
+			const d = throwDices();
+			r += ranks[d];
+		}
+		
+		return r;
+	}
+	
+	function slotImage(data) {
+		let r = [];
+		for(const i in data) {
+			r.push(symbols_a[data[i]]);
+		}
+		
+		return r;
+	}
+	
+	function step(list) { 
+		for (let i = 0; i < list.length; i++) {
+			mainpage.children[i].innerHTML = list[i];
+		}
+	}
+	
+		
+	function play(duration, images) {
+		const result = slotImage(slot());
+		const acts = result.length;
+		let active = true;
+		let timecore = Date.now();
+		let timestamp = 0;
+		
+		const init = (cells) => {
+			const msg = `<bb></bb>`.repeat(cells)
+
+			print(msg);
+		}
+		
+		const loop = () => {
+			const ts = Date.now() - timecore;
+			const dt = ts - timestamp;
+			timestamp = ts;
+		
+			active = timestamp <= duration;
+		
+			if (!active) {
+				return null;
+			}
+			
+			const act = Math.floor(timestamp % duration / duration * (acts + 1));
+			const image = result.map((symbol, i) => { return i < act ? symbol : rng_symbol(images)});
+			step(image);
+			
+			requestAnimationFrame(loop);
+		}
+		
+		init(result.length);
+		loop();
+		
+		return result;
+	}
+
+	function main() {
+		let symbols = symbols_b.slice();
+		const duration = 1000;
+		let timestamp = Date.now();
+		
+		const run = (dt, list) => {
+			const l = play(dt, list);
+		}
+		
+		document.body.onclick = () => {
+			const dt = Date.now() - timestamp;
+			timestamp += dt;
+			run(dt, symbols);
+		}
+		
+		run(duration, symbols);
+	}
+
+	main();
+</script>
+
+<style>
+	body, html {
+		width: 100vw;
+		height: 100vh;
+		margin: 0;
+		display: flex;
+		//background: #000000;
+	}
+	
+	log, dust {
+		display: none;
+	}
+	
+	page {
+		margin: auto;
+		user-select: none;
+	}
+	
+	#mainpage {
+		font-size: 10vh;
+		text-align: center;
+	}
+	
+	#mainpage bb {
+		display: block;
+		height: 2em;
+		
+	}
+</style>
+
+<script>
+	main();
+</script>
